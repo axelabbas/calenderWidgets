@@ -12,25 +12,25 @@ class timelineScreen extends StatefulWidget {
 class _timelineScreenState extends State<timelineScreen> {
   DateTime _selectedValue = DateTime.now();
 
-  DatePickerController _controller = DatePickerController();
+  final DatePickerController _controller = DatePickerController();
   String events = "none";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: ListView(
           children: <Widget>[
             DatePicker(
-              DateTime.now().subtract(Duration(days: 100)),
+              DateTime.now().subtract(const Duration(days: 100)),
               initialSelectedDate: DateTime.now(),
               controller: _controller,
               selectionColor: Colors.black,
               selectedTextColor: Colors.white,
               shouldAnimate: true,
               curve: Curves.easeOut,
-              duration: Duration(seconds: 1),
+              duration: const Duration(seconds: 1),
               onDateChange: (date) {
                 // New date selected
                 setState(() {
@@ -39,7 +39,7 @@ class _timelineScreenState extends State<timelineScreen> {
                 });
               },
             ),
-            Text("$events")
+            Text(events)
           ],
         ),
       ),

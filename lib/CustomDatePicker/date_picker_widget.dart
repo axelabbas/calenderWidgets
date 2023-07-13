@@ -63,9 +63,9 @@ class DatePicker extends StatefulWidget {
   /// Locale for the calendar default: en_us
   final String locale;
 
-  DatePicker(
+  const DatePicker(
     this.startDate, {
-    Key? key,
+    super.key,
     this.width = 60,
     this.height = 80,
     this.controller,
@@ -90,13 +90,13 @@ class DatePicker extends StatefulWidget {
             "provide both activated and deactivated dates List at the same time.");
 
   @override
-  State<StatefulWidget> createState() => new _DatePickerState();
+  State<StatefulWidget> createState() => _DatePickerState();
 }
 
 class _DatePickerState extends State<DatePicker> {
   DateTime? _currentDate;
 
-  ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
 
   late final TextStyle selectedDateStyle;
   late final TextStyle selectedMonthStyle;
@@ -117,18 +117,18 @@ class _DatePickerState extends State<DatePicker> {
       widget.controller!.setDatePickerState(this);
     }
 
-    this.selectedDateStyle =
+    selectedDateStyle =
         widget.dateTextStyle.copyWith(color: widget.selectedTextColor);
-    this.selectedMonthStyle =
+    selectedMonthStyle =
         widget.monthTextStyle.copyWith(color: widget.selectedTextColor);
-    this.selectedDayStyle =
+    selectedDayStyle =
         widget.dayTextStyle.copyWith(color: widget.selectedTextColor);
 
-    this.deactivatedDateStyle =
+    deactivatedDateStyle =
         widget.dateTextStyle.copyWith(color: widget.deactivatedColor);
-    this.deactivatedMonthStyle =
+    deactivatedMonthStyle =
         widget.monthTextStyle.copyWith(color: widget.deactivatedColor);
-    this.deactivatedDayStyle =
+    deactivatedDayStyle =
         widget.dayTextStyle.copyWith(color: widget.deactivatedColor);
 
     super.initState();
@@ -138,7 +138,7 @@ class _DatePickerState extends State<DatePicker> {
   Widget build(BuildContext context) {
     bool firstTimeAnimating = true;
     double _calculateDateOffset(DateTime date) {
-      final startDate = new DateTime(
+      final startDate = DateTime(
           widget.startDate.year, widget.startDate.month, widget.startDate.day);
       int offset = date.difference(startDate).inDays;
       return ((offset + 2) * widget.width);
@@ -146,7 +146,7 @@ class _DatePickerState extends State<DatePicker> {
 
     // animate to the current date
 
-    return Container(
+    return SizedBox(
       height: widget.height,
       child: ListView.builder(
         itemCount: widget.daysCount,
@@ -164,11 +164,11 @@ class _DatePickerState extends State<DatePicker> {
           // get the date object based on the index position
           // if widget.startDate is null then use the initialDateValue
           DateTime date;
-          DateTime _date = widget.startDate.add(Duration(days: index));
-          DateTime _dateBefore =
+          DateTime date0 = widget.startDate.add(Duration(days: index));
+          DateTime dateBefore =
               widget.startDate.subtract(Duration(days: index));
 
-          date = new DateTime(_date.year, _date.month, _date.day);
+          date = DateTime(date0.year, date0.month, date0.day);
 
           bool isDeactivated = false;
 
@@ -310,7 +310,7 @@ class DatePickerController {
   /// Calculate the number of pixels that needs to be scrolled to go to the
   /// date provided in the argument
   double _calculateDateOffset(DateTime date) {
-    final startDate = new DateTime(
+    final startDate = DateTime(
         _datePickerState!.widget.startDate.year,
         _datePickerState!.widget.startDate.month,
         _datePickerState!.widget.startDate.day);

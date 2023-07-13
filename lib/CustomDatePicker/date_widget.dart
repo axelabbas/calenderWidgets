@@ -17,7 +17,7 @@ class DateWidget extends StatelessWidget {
   final DateSelectionCallback? onDateSelected;
   final String? locale;
 
-  DateWidget({
+  const DateWidget({super.key, 
     required this.date,
     required this.monthTextStyle,
     required this.dayTextStyle,
@@ -33,26 +33,26 @@ class DateWidget extends StatelessWidget {
     return InkWell(
       child: Container(
         width: width,
-        margin: EdgeInsets.all(1.0),
+        margin: const EdgeInsets.all(1.0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
           color: selectionColor,
         ),
         child: Padding(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(
-                  new DateFormat("MMM", locale)
+                  DateFormat("MMM", locale)
                       .format(date)
                       .toUpperCase(), // Month
                   style: monthTextStyle),
               Text(date.day.toString(), // Date
                   style: dateTextStyle),
               Text(
-                  new DateFormat("E", locale)
+                  DateFormat("E", locale)
                       .format(date)
                       .toUpperCase(), // WeekDay
                   style: dayTextStyle)
@@ -64,7 +64,7 @@ class DateWidget extends StatelessWidget {
         // Check if onDateSelected is not null
         if (onDateSelected != null) {
           // Call the onDateSelected Function
-          onDateSelected!(this.date);
+          onDateSelected!(date);
         }
       },
     );

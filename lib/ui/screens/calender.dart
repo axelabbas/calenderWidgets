@@ -46,7 +46,7 @@ class _calenderScreenState extends State<calenderScreen> {
               },
             );
           } else {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
         },
       ),
@@ -56,7 +56,7 @@ class _calenderScreenState extends State<calenderScreen> {
 
 class EventDataSource extends CalendarDataSource {
   EventDataSource(List events) {
-    this.appointments = events;
+    appointments = events;
   }
 
   getEvent(int index) => appointments![index];
