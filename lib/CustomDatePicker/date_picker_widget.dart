@@ -4,6 +4,45 @@ import 'package:calendarevents/CustomDatePicker/extra/style.dart';
 import 'package:calendarevents/CustomDatePicker/gestures/tap.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
+
+class EventDataSource extends CalendarDataSource {
+  EventDataSource(List events) {
+    appointments = events;
+  }
+
+  getEvent(int index) => appointments![index];
+
+  @override
+  DateTime getStartTime(int index) {
+    // TODO: implement getStartTime
+    return DateTime.parse(getEvent(index)["start"]["dateTime"]);
+  }
+
+  @override
+  DateTime getEndTime(int index) {
+    // TODO: implement getEndTime
+    return DateTime.parse(getEvent(index)["end"]["dateTime"]);
+  }
+
+  @override
+  String getSubject(int index) {
+    // TODO: implement getSubject
+    return getEvent(index)["summary"];
+  }
+
+  @override
+  Color getColor(int index) {
+    // TODO: implement getColor
+    return Colors.blue;
+  }
+
+  @override
+  bool isAllDay(int index) {
+    // TODO: implement isAllDay
+    return false;
+  }
+}
 
 class DatePicker extends StatefulWidget {
   /// Start Date in case user wants to show past dates
@@ -17,6 +56,8 @@ class DatePicker extends StatefulWidget {
   final bool shouldAnimate;
   final Curve curve;
   final Duration duration;
+  final List events;
+  final double iconSize;
 
   /// Height of the selector
   final double height;
@@ -69,6 +110,8 @@ class DatePicker extends StatefulWidget {
     this.width = 60,
     this.height = 80,
     this.controller,
+    required this.events,
+    required this.iconSize,
     required this.duration,
     required this.shouldAnimate,
     required this.curve,
@@ -136,6 +179,12 @@ class _DatePickerState extends State<DatePicker> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSameDate(DateTime first, DateTime second) {
+      return first.year == second.year &&
+          first.month == second.month &&
+          first.day == second.day;
+    }
+
     bool firstTimeAnimating = true;
     double _calculateDateOffset(DateTime date) {
       final startDate = DateTime(
@@ -165,8 +214,6 @@ class _DatePickerState extends State<DatePicker> {
           // if widget.startDate is null then use the initialDateValue
           DateTime date;
           DateTime date0 = widget.startDate.add(Duration(days: index));
-          DateTime dateBefore =
-              widget.startDate.subtract(Duration(days: index));
 
           date = DateTime(date0.year, date0.month, date0.day);
 
@@ -198,9 +245,16 @@ class _DatePickerState extends State<DatePicker> {
           // Check if this date is the one that is currently selected
           bool isSelected =
               _currentDate != null ? _compareDate(date, _currentDate!) : false;
-
+          List todayEvents = widget.events
+              .map((event) =>
+                  (isSameDate(DateTime.parse(event['start']['dateTime']), date)
+                      ? true
+                      : false))
+              .toList();
           // Return the Date Widget
-          return DateWidget(
+          DateWidget datewidget = DateWidget(
+            iconSize: widget.iconSize,
+            eventCount: todayEvents.where((item) => item == true).length,
             date: date,
             monthTextStyle: isDeactivated
                 ? deactivatedMonthStyle
@@ -234,6 +288,7 @@ class _DatePickerState extends State<DatePicker> {
               });
             },
           );
+          return datewidget;
         },
       ),
     );
@@ -253,6 +308,10 @@ class DatePickerController {
 
   void setDatePickerState(_DatePickerState state) {
     _datePickerState = state;
+  }
+
+  DateTime getCurrentDate() {
+    return _datePickerState!._currentDate!;
   }
 
   void jumpToSelection() {
@@ -275,6 +334,33 @@ class DatePickerController {
         _calculateDateOffset(_datePickerState!._currentDate!),
         duration: duration,
         curve: curve);
+  }
+
+  bool isSameDate(DateTime first, DateTime second) {
+    return first.year == second.year &&
+        first.month == second.month &&
+        first.day == second.day;
+  }
+
+  void animateToNextEvent(
+      {duration = const Duration(milliseconds: 500), curve = Curves.linear}) {
+    final nextEvent = _datePickerState!.widget.events.firstWhere(
+      (event) {
+        DateTime nextEventTime = DateTime.parse(event['start']['dateTime']);
+        DateTime? currentTime = _datePickerState!._currentDate;
+
+        return (currentTime!.isBefore(nextEventTime) &&
+            (isSameDate(nextEventTime, currentTime) == false));
+      },
+      orElse: () {
+        return -1;
+      },
+    );
+    if (nextEvent == -1) {
+      return;
+    }
+    DateTime nextEventDate = DateTime.parse(nextEvent['start']['dateTime']);
+    setDateAndAnimate(nextEventDate, curve: curve, duration: duration);
   }
 
   /// This function will animate to any date that is passed as an argument

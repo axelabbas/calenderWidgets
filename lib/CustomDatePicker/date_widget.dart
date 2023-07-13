@@ -16,17 +16,26 @@ class DateWidget extends StatelessWidget {
   final Color selectionColor;
   final DateSelectionCallback? onDateSelected;
   final String? locale;
+  final int? eventCount;
+  final double? iconSize;
 
-  const DateWidget({super.key, 
+  const DateWidget({
+    super.key,
     required this.date,
+    required this.iconSize,
     required this.monthTextStyle,
     required this.dayTextStyle,
     required this.dateTextStyle,
     required this.selectionColor,
     this.width,
+    required this.eventCount,
     this.onDateSelected,
     this.locale,
   });
+
+  int? getEventCount() {
+    return eventCount;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,17 +54,15 @@ class DateWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(
-                  DateFormat("MMM", locale)
-                      .format(date)
-                      .toUpperCase(), // Month
+                  DateFormat("MMM", locale).format(date).toUpperCase(), // Month
                   style: monthTextStyle),
               Text(date.day.toString(), // Date
                   style: dateTextStyle),
-              Text(
-                  DateFormat("E", locale)
-                      .format(date)
-                      .toUpperCase(), // WeekDay
-                  style: dayTextStyle)
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: countToDots(eventCount),
+              )
             ],
           ),
         ),
@@ -68,5 +75,16 @@ class DateWidget extends StatelessWidget {
         }
       },
     );
+  }
+
+  countToDots(amount) {
+    List<Widget> widgets = [];
+    for (int i = 0; i < amount; i++) {
+      widgets.add(Icon(
+        Icons.circle,
+        size: iconSize,
+      ));
+    }
+    return widgets;
   }
 }
