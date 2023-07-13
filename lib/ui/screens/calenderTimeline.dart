@@ -14,14 +14,28 @@ class timelineScreen extends StatefulWidget {
 
 class _timelineScreenState extends State<timelineScreen> {
   DateTime _selectedValue = DateTime.now();
+  List jsData = [];
   Future<List> readJson() async {
     final String response = await rootBundle.loadString('assets/events.json');
     final data = await json.decode(response);
     return data;
   }
 
+  getEventsInDate(List data, DateTime date) {
+    return data
+        .where((element) =>
+            isSameDate(DateTime.parse(element["start"]["dateTime"]), date))
+        .toList();
+  }
+
   final DatePickerController _controller = DatePickerController();
-  String events = "none";
+  List events = [];
+  bool isSameDate(DateTime first, DateTime second) {
+    return first.year == second.year &&
+        first.month == second.month &&
+        first.day == second.day;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +43,8 @@ class _timelineScreenState extends State<timelineScreen> {
         onPressed: () {
           setState(() {
             _controller.animateToNextEvent();
-            dateToEvent(_controller.getCurrentDate());
+            events = getEventsInDate(jsData, _selectedValue);
+
             // _controller.setDateAndAnimate(DateTime.now());
             // dateToEvent(DateTime.now());
           });
@@ -39,6 +54,9 @@ class _timelineScreenState extends State<timelineScreen> {
         future: readJson(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            jsData = snapshot.data!;
+            events = getEventsInDate(jsData, _selectedValue);
+
             return SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
@@ -51,21 +69,39 @@ class _timelineScreenState extends State<timelineScreen> {
                     selectionColor: Colors.black,
                     selectedTextColor: Colors.white,
                     shouldAnimate: true,
-                    events: snapshot.data!,
+                    events: jsData,
                     height: 100,
                     iconSize: 10,
                     width: 50,
                     curve: Curves.easeOut,
-                    duration: Duration(milliseconds: 800),
+                    duration: const Duration(milliseconds: 800),
                     onDateChange: (date) {
                       // New date selected
                       setState(() {
                         _selectedValue = date;
-                        dateToEvent(_controller.getCurrentDate());
+                        events = getEventsInDate(jsData, _selectedValue);
                       });
                     },
                   ),
-                  Text(events)
+                  Container(
+                    height: 500,
+                    child: ListView.builder(
+                      itemCount: events.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          height: 300,
+                          width: 300,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                              color: Colors.black),
+                          child: Column(children: [
+                            Text(events[index]["summary"]),
+                            Text(events[index]["description"]),
+                          ]),
+                        );
+                      },
+                    ),
+                  )
                 ],
               ),
             );
@@ -75,10 +111,6 @@ class _timelineScreenState extends State<timelineScreen> {
         },
       ),
     );
-  }
-
-  dateToEvent(DateTime date) {
-    events = date.toString();
   }
 
   bool _compareDate(DateTime date1, DateTime date2) {
