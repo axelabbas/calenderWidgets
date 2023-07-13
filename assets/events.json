@@ -12,7 +12,7 @@
       "location": "I will send you the link the day before we meet.",
       "creator": { "email": "john.desro@gmail.com", "self": true },
       "organizer": { "email": "john.desro@gmail.com", "self": true },
-      "start": { "dateTime": "2023-07-13T10:30:00-07:00" },
+      "start": { "dateTime": "2023-07-13" },
       "end": { "dateTime": "2019-10-07T11:20:00-07:00" },
       "iCalUID": "l3uqagf6re13e3pme46nhhvskc@google.com",
       "sequence": 0,
@@ -40,7 +40,7 @@
       "location": "I will send you the link the day before we meet.",
       "creator": { "email": "john.desro@gmail.com", "self": true },
       "organizer": { "email": "john.desro@gmail.com", "self": true },
-      "start": { "dateTime": "2023-07-13T11:45:00-07:00" },
+      "start": { "dateTime": "2023-07-13" },
       "end": { "dateTime": "2019-06-02T12:35:00-07:00" },
       "iCalUID": "e9uk187t9f85tjkumttlfq0k54@google.com",
       "sequence": 0,
@@ -68,7 +68,7 @@
       "location": "I will send you the link the day before we meet.",
       "creator": { "email": "john.desro@gmail.com", "self": true },
       "organizer": { "email": "john.desro@gmail.com", "self": true },
-      "start": { "dateTime": "2023-07-13T14:00:00-07:00" },
+      "start": { "dateTime": "2023-07-13" },
       "end": { "dateTime": "2019-07-13T14:50:00-07:00" },
       "iCalUID": "0e60j280277omb03rc4eqa3tvs@google.com",
       "sequence": 0,
@@ -105,7 +105,7 @@
         "self": true
       },
       "start": {
-        "dateTime": "2023-07-13T19:30:00-07:00",
+        "dateTime": "2023-07-14",
         "timeZone": "America/Los_Angeles"
       },
       "end": {
@@ -144,7 +144,7 @@
         "self": true
       },
       "start": {
-        "dateTime": "2023-07-13T18:00:00-07:00",
+        "dateTime": "2023-07-14",
         "timeZone": "America/Los_Angeles"
       },
       "end": {
@@ -187,7 +187,7 @@
         "self": true
       },
       "start": {
-        "dateTime": "2023-07-13T19:30:00-07:00",
+        "dateTime": "2023-07-15",
         "timeZone": "America/Los_Angeles"
       },
       "end": {
@@ -226,7 +226,7 @@
         "self": true
       },
       "start": {
-        "dateTime": "2023-07-15",
+        "dateTime": "2023-07-16",
         "timeZone": "America/Los_Angeles"
       },
       "end": {

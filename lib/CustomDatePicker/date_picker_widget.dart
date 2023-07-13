@@ -363,6 +363,26 @@ class DatePickerController {
     setDateAndAnimate(nextEventDate, curve: curve, duration: duration);
   }
 
+  void animateToPreviousEvent(
+      {duration = const Duration(milliseconds: 500), curve = Curves.linear}) {
+    final nextEvent = _datePickerState!.widget.events.lastWhere(
+      (event) {
+        DateTime nextEventTime = DateTime.parse(event['start']['dateTime']);
+        DateTime? currentTime = _datePickerState!._currentDate;
+        return (currentTime!.isAfter(nextEventTime) &&
+            (isSameDate(nextEventTime, currentTime) == false));
+      },
+      orElse: () {
+        return -1;
+      },
+    );
+    if (nextEvent == -1) {
+      return;
+    }
+    DateTime nextEventDate = DateTime.parse(nextEvent['start']['dateTime']);
+    setDateAndAnimate(nextEventDate, curve: curve, duration: duration);
+  }
+
   /// This function will animate to any date that is passed as an argument
   /// In case a date is out of range nothing will happen
   void animateToDate(DateTime date,

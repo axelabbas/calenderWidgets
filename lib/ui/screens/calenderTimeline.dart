@@ -39,14 +39,38 @@ class _timelineScreenState extends State<timelineScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          InkWell(
+              onTap: () {
+                setState(() {
+                  _controller.animateToNextEvent();
+                  _selectedValue = _controller.getCurrentDate();
+                  events = getEventsInDate(jsData, _selectedValue);
+                });
+              },
+              child: Icon(Icons.arrow_right_outlined)),
+        ],
+        title: InkWell(
+            onTap: () {
+              setState(() {
+                _controller.animateToPreviousEvent();
+                _selectedValue = _controller.getCurrentDate();
+                events = getEventsInDate(jsData, _selectedValue);
+              });
+            },
+            child: Icon(Icons.arrow_left_outlined)),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            _controller.animateToNextEvent();
-            events = getEventsInDate(jsData, _selectedValue);
+            // _controller.animateToNextEvent();
+            // _selectedValue = _controller.getCurrentDate();
+            // events = getEventsInDate(jsData, _selectedValue);
 
-            // _controller.setDateAndAnimate(DateTime.now());
-            // dateToEvent(DateTime.now());
+            _controller.setDateAndAnimate(DateTime.now());
+            _selectedValue = _controller.getCurrentDate();
+            events = getEventsInDate(jsData, _selectedValue);
           });
         },
       ),
@@ -55,6 +79,9 @@ class _timelineScreenState extends State<timelineScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             jsData = snapshot.data!;
+            jsData.sort((a, b) => DateTime.parse(a['start']['dateTime'])
+                .compareTo(DateTime.parse(b['start']['dateTime'])));
+            ;
             events = getEventsInDate(jsData, _selectedValue);
 
             return SizedBox(
