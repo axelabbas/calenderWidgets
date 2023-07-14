@@ -115,17 +115,8 @@ class _timelineScreenState extends State<timelineScreen> {
                     child: ListView.builder(
                       itemCount: events.length,
                       itemBuilder: (context, index) {
-                        return Container(
-                          height: 300,
-                          width: 300,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25),
-                              color: Colors.black),
-                          child: Column(children: [
-                            Text(events[index]["summary"]),
-                            Text(events[index]["description"]),
-                          ]),
-                        );
+                        return EventWidget(events[index]["summary"], "10-12",
+                            "Deserunt ex do culpa ut excepteur ut proident aute officia.");
                       },
                     ),
                   )
@@ -137,6 +128,23 @@ class _timelineScreenState extends State<timelineScreen> {
           }
         },
       ),
+    );
+  }
+
+  EventWidget(
+    title,
+    time,
+    shortDescription,
+  ) {
+    return Container(
+      margin: EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(25),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25), color: Colors.black),
+      child: Column(children: [
+        Text(title),
+        Text(shortDescription),
+      ]),
     );
   }
 
